@@ -3,8 +3,13 @@ import logo from './mainStreetAuto.svg';
 import axios from 'axios';
 import './App.css';
 
+
+
 // Toast notification dependencies
 import { ToastContainer, toast } from 'react-toastify';
+
+
+const baseURL = "https://joes-autos.herokuapp.com/api";
 
 class App extends Component {
   constructor( props ) {
@@ -30,16 +35,43 @@ class App extends Component {
 
   getVehicles() {
     // axios (GET)
+    axios({
+      method: "GET",
+      url: baseURL + "/vehicles"
+    }).then( response => {
+      this.setState({vehiclesToDisplay: response.data});
+      toast.success("Got Vehicles")
+    }).catch(error => {
+      toast.error("this was an error", error)
+    })
     // setState with response -> vehiclesToDisplay
   }
 
   getPotentialBuyers() {
     // axios (GET)
+    axios({
+      method: "GET",
+      url:`${baseURL}/buyers`
+    }).then(response => {
+      this.setState({buyersToDisplay: response.data});
+      toast.success("success")
+    }).catch(error => {
+      toast.error("unsuccessful")
+    })
     // setState with response -> buyersToDisplay
   }
 
   sellCar( id ) {
     // axios (DELETE)
+    axios({
+      method: "DELETE",
+      url: `${baseURL}/vehicles/${id}`
+    }).then( response => {
+      this.setState({vehiclesToDisplay: response.data.vehicles});
+      toast.success("successfully removed car")
+    }).catch(error => {
+      toast.error("delete unsuccessful")
+    })
     // setState with response -> vehiclesToDisplay
   }
 
@@ -47,6 +79,15 @@ class App extends Component {
     let make = this.refs.selectedMake.value;
 
     // axios (GET)
+    axios({
+      method: "GET",
+      url: `${baseURL}/vehicles?make=${make}`
+    }).then(response =>{
+      this.setState({vehiclesToDisplay: response.data});
+      toast.success("success")
+    }).catch(error =>{
+      toast.error("not successful")
+    })
     // setState with response -> vehiclesToDisplay
   }
 
@@ -54,11 +95,30 @@ class App extends Component {
     let color = this.refs.selectedColor.value;
 
     // axios (GET)
+    axios({
+      method: "GET",
+      url: `${baseURL}/vehicles?color=${color}`
+    }).then(response => {
+      this.setState({vehiclesToDisplay: response.data});
+      toast.success("success")
+    }).catch(error => {
+      toast.error("not successful")
+    })
+    
     // setState with response -> vehiclesToDisplay
   }
 
   updatePrice( priceChange, id ) {
     // axios (PUT)
+    axios({
+      method: "PUT",
+      url: `${baseURL}/vehicles/${id}/${priceChange}`
+    }).then(response => {
+      this.setState({ vehiclesToDisplay: response.data.vehicles});
+      toast.success("Successfully update vehicle price")
+    }).catch( error => {
+      toast.error("error with request")
+    })
     // setState with response -> vehiclesToDisplay
   }
 
@@ -72,6 +132,16 @@ class App extends Component {
     };
 
     // axios (POST)
+    axios({
+      method: "POST",
+      url: baseURL + '/vehicles',
+      data: newCar
+    }).then(response => {
+      this.setState({vehiclesToDisplay: response.data.vehicles})
+      toast.success("car posted successfully")
+    }).catch(error => {
+      toast.error("unsuccessfully added vehicle")
+    })
     // setState with response -> vehiclesToDisplay
   }
 
@@ -83,11 +153,30 @@ class App extends Component {
     };
 
     //axios (POST)
+    axios({
+      method: "POST",
+      url: `${baseURL}/buyers `,
+      data: newBuyer
+    }).then(response => {
+      this.setState({buyersToDisplay: response.data.buyers});
+      toast.success("success")
+    }).catch(error => {
+      toast.error("not working")
+    })
     // setState with response -> buyersToDisplay
   }
 
   deleteBuyer( id ) {
     // axios (DELETE)
+    axios({
+      method: "DELETE",
+      url: `${baseURL}/buyers/${id} `,
+    }).then(response => {
+      this.setState({buyersToDisplay: response.data.buyers});
+      toast.success("success")
+    }).catch(error =>{
+      toast.error("error")
+    })
     //setState with response -> buyersToDisplay
   }
 
@@ -95,6 +184,15 @@ class App extends Component {
     let searchLetters = this.refs.searchLetters.value;
 
     // axios (GET)
+    axios({
+      method: "GET",
+      url: `${baseURL}/buyers?name=${searchLetters} `
+    }).then(response =>{
+      this.setState({buyersToDisplay: response.data});
+      toast.success("success")
+    }).catch(error => {
+      toast.error("error")
+    })
     // setState with response -> buyersToDisplay
   }
 
@@ -102,6 +200,16 @@ class App extends Component {
     let year = this.refs.searchYear.value;
 
     // axios (GET)
+    axios({
+      method: "GET",
+      url: `${baseURL}/vehicles?year=${year} `
+
+    }).then(response => {
+      this.setState({vehiclesToDisplay: response.data});
+      toast.success("worked")
+    }).catch(error => {
+      toast.error("error")
+    })
     // setState with response -> vehiclesToDisplay
   }
 
